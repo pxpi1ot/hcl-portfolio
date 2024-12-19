@@ -1,7 +1,7 @@
 import { defineConfig, defineCollection, s } from "velite";
-import rehypeSlug from "rehype-slug";
+// import rehypeSlug from "rehype-slug";
 import rehypePrettyCode from "rehype-pretty-code";
-import rehypeAutolinkHeadings from "rehype-autolink-headings";
+// import rehypeAutolinkHeadings from "rehype-autolink-headings";
 
 const computedFields = <T extends { slug: string }>(data: T) => ({
     ...data,
@@ -10,7 +10,7 @@ const computedFields = <T extends { slug: string }>(data: T) => ({
 
 const posts = defineCollection({
     name: "Post",
-    pattern: "blog/**/*.mdx",
+    pattern: "notes/**/*.mdx",
     schema: s
         .object({
             slug: s.path(),
@@ -36,18 +36,18 @@ export default defineConfig({
     collections: { posts },
     mdx: {
         rehypePlugins: [
-            rehypeSlug,
-            [rehypePrettyCode, { theme: "github-dark" }],
-            [
-                rehypeAutolinkHeadings,
-                {
-                    behavior: "wrap",
-                    properties: {
-                        className: ["subheading-anchor"],
-                        ariaLabel: "Link to section",
-                    },
-                },
-            ],
+            // rehypeSlug,
+            // [rehypePrettyCode, { theme: "github-dark" }],
+            // [
+            //     rehypeAutolinkHeadings,
+            //     {
+            //         behavior: "wrap",
+            //         properties: {
+            //             className: ["subheading-anchor"],
+            //             ariaLabel: "Link to section",
+            //         },
+            //     },
+            // ],
         ],
         remarkPlugins: [],
     },

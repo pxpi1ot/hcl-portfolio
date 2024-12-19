@@ -1,5 +1,7 @@
 import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
+import { format, differenceInCalendarDays } from 'date-fns';
+import { Post } from "#site/content";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -34,4 +36,35 @@ export function formatDate(date: string) {
     const yearsAgo = Math.floor(daysAgo / 365);
     return `${fullDate} (${yearsAgo}y ago)`;
   }
+}
+
+
+export function formatDateOrDaysAgo(dateString: string) {
+  const date = new Date(dateString);
+  const today = new Date();
+  const daysDifference = differenceInCalendarDays(today, date);
+
+  if (daysDifference < 0) {
+    // 如果日期在未来，则直接返回日期
+    return format(date, 'yyyy-MM-dd');
+  }
+
+  if (daysDifference <= 7) {
+    // 如果日期在7天以内（包括今天），显示几天前
+    if (daysDifference === 0) {
+      return '今天';
+    }
+    return `${daysDifference} 天前`;
+  }
+
+  // 如果日期超过7天，显示具体日期
+  return format(date, 'yyyy-MM-dd');
+}
+
+export function sortPosts(posts: Post[]) {
+  return posts.sort((a, b) => {
+    if (a.date > b.date) return -1;
+    if (a.date < b.date) return 1
+    return 0
+  })
 }

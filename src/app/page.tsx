@@ -1,14 +1,13 @@
+"use client";
 import BlurFade from "@/components/magicui/blur-fade";
 import BlurFadeText from "@/components/magicui/blur-fade-text";
+
 import { ProjectCard } from "@/components/project-card";
-import { HiDevicePhoneMobile } from "react-icons/hi2";
-import { IoLogoWechat } from "react-icons/io5";
-import { MailIcon } from "lucide-react";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { DATA } from "@/data/resume";
-import Link from "next/link";
+
 import Image from "next/image";
 
 const BLUR_FADE_DELAY = 0.04;

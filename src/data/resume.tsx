@@ -21,17 +21,18 @@ export const DATA = {
 		"Uniapp",
 		"Typescript",
 		"Javascript",
+		"TailwindCSS",
 		"Node.js",
 		"Hono.js",
 		"Drizzle ORM",
-		"Shadcn",
+		"ShadcnUI",
 		"Postgres",
 		"Mysql",
 		"Docker",
 	],
 	navbar: [
 		{ href: "/", icon: HomeIcon, label: "主页" },
-		{ href: "/blog", icon: NotebookIcon, label: "笔记" },
+		{ href: "/notes", icon: NotebookIcon, label: "笔记" },
 	],
 	contact: {
 		details: [
