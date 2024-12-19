@@ -2,6 +2,7 @@ import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
 import { format, differenceInCalendarDays } from 'date-fns';
 import { Post } from "#site/content";
+import { zhCN } from "date-fns/locale"
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -46,7 +47,7 @@ export function formatDateOrDaysAgo(dateString: string) {
 
   if (daysDifference < 0) {
     // 如果日期在未来，则直接返回日期
-    return format(date, 'yyyy-MM-dd');
+    return format(date, 'yyyy年MM月dd日');
   }
 
   if (daysDifference <= 7) {
@@ -58,7 +59,7 @@ export function formatDateOrDaysAgo(dateString: string) {
   }
 
   // 如果日期超过7天，显示具体日期
-  return format(date, 'yyyy-MM-dd');
+  return format(date, 'yyyy年MM月dd日EEEE', { locale: zhCN });
 }
 
 export function sortPosts(posts: Post[]) {

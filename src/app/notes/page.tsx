@@ -46,7 +46,7 @@ export default function BlogPage() {
 					<BlurFade delay={BLUR_FADE_DELAY * 2 + index * 0.05} key={post.slug}>
 						<Link
 							className="flex flex-col space-y-1 mb-4"
-							href={`/blog/${post.slug}`}
+							href={post.slug}
 							onMouseOver={() => setActiveIndex(index)}
 							onMouseLeave={() => setActiveIndex(-1)}
 						>
