@@ -791,9 +791,7 @@
                 "*link*",
                 "*uri*"
             ],
-            "settings": {
-                "fontStyle": "underline"
-            }
+            "settings": {}
         },
         {
             "name": "Decorators",

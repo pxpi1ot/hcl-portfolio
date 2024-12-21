@@ -1,39 +1,266 @@
-[data-rehype-pretty-code-figure] pre {
-	@apply px-0;
+:root {
+	color-scheme: dark;
+	--sl-sidebar-width: 17rem;
 }
 
-[data-rehype-pretty-code-figure] code {
-	@apply text-sm !leading-loose md:text-base border-0 p-0;
+body {
+	-moz-osx-font-smoothing: grayscale;
+	-webkit-font-smoothing: antialiased;
 }
 
-[data-rehype-pretty-code-figure] code[data-line-numbers] {
+button[title="Copy code"] {
+	background-color: unset;
+}
+
+span > code > button {
+	display: none;
+	width: 0;
+	height: 0;
+}
+
+#_top {
+	font-weight: 900;
+	@apply dark:text-[rgb(255_245_224)] text-[rgb(38,38,43)];
+}
+
+p a {
+	@apply text-blue-500 !important;
+	text-decoration: none !important;
+}
+
+p a:hover {
+	text-decoration: underline !important;
+}
+
+a > code {
+	text-decoration: none !important;
+	text-decoration-style: unset !important;
+	text-decoration-color: unset !important;
+	text-decoration-thickness: unset !important;
+}
+a > code::before {
+	content: unset !important;
+}
+a > code::after {
+	content: unset !important;
+}
+h1 a,
+h2 a,
+h3 a,
+h4 a,
+h5 a,
+h6 a {
+	text-decoration: none;
+}
+
+h2::after,
+h3::after,
+h4::after,
+h5::after {
+	content: "#";
+	color: #010101;
+	margin-left: 0.5rem;
+	font-size: 1.5rem;
+	position: relative;
+	visibility: hidden;
+}
+
+.dark h2::after,
+.dark h3::after,
+.dark h4::after,
+.dark h5::after {
+	content: "#";
+	color: #ffffff;
+	margin-left: 0.5rem;
+	font-size: 1.5rem;
+	position: relative;
+	visibility: hidden;
+}
+h2:hover::after,
+h3:hover::after,
+h4:hover::after,
+h5:hover::after {
+	visibility: visible;
+}
+
+h3 code {
+	@apply !text-lg md:!text-xl;
+}
+
+pre {
+	@apply !px-0 rounded-lg;
+}
+
+code {
+	@apply text-sm md:text-base !leading-loose;
+	font-family: "JetBrains Mono", monospace;
+}
+
+pre > code {
+	/* 
+	 * Starlight unsets some styles so important is needed here.
+	 * https://github.com/withastro/starlight/blob/main/packages/starlight/style/markdown.css#L94
+	 */
+
+	counter-reset: line !important;
+	overflow-x: auto !important;
+}
+
+figcaption {
+	/* https://github.com/withastro/starlight/blob/main/packages/starlight/style/markdown.css#L4  */
+	margin-bottom: -1rem;
+}
+
+code[data-theme*=" "],
+code[data-theme*=" "] span {
+	color: var(--shiki-light);
+	background-color: var(--shiki-light-bg);
+}
+
+@media (prefers-color-scheme: dark) {
+	code[data-theme*=" "],
+	code[data-theme*=" "] span {
+		color: var(--shiki-dark);
+		background-color: var(--shiki-dark-bg);
+	}
+}
+
+code[data-line-numbers] {
 	counter-reset: line;
 }
 
-[data-rehype-pretty-code-figure] code[data-line-numbers] > [data-line]::before {
+code[data-line-numbers] > [data-line]::before {
 	counter-increment: line;
 	content: counter(line);
-	@apply mr-4 inline-block w-4 text-right text-gray-500;
+	@apply inline-block w-4 mr-4 text-right text-gray-500;
 }
 
-[data-rehype-pretty-code-figure] [data-line] {
-	@apply border-l-2 border-l-transparent px-3;
+.prose {
+	@apply max-w-[55rem] sm:text-lg md:text-xl !leading-7 sm:!leading-9;
 }
 
-[data-rehype-pretty-code-figure] [data-highlighted-line] {
+pre [data-line] {
+	@apply px-4 border-l-2 border-l-transparent;
+}
+
+[data-highlighted-line] {
 	background: rgba(200, 200, 255, 0.1);
 	@apply border-l-blue-400;
 }
 
-[data-rehype-pretty-code-figure] [data-highlighted-chars] {
-	@apply rounded bg-zinc-600/50;
+[data-highlighted-chars] {
+	@apply bg-zinc-600/50 rounded;
 	box-shadow: 0 0 0 4px rgb(82 82 91 / 0.5);
 }
 
-[data-rehype-pretty-code-figure] [data-chars-id] {
-	@apply border-b-2 p-1 shadow-none;
+[data-chars-id] {
+	@apply shadow-none px-1 py-0.5  border-b-2;
+}
+
+[data-chars-id] span {
+	@apply !text-inherit;
+}
+
+[data-chars-id="v"] {
+	@apply !text-pink-300 bg-rose-800/50 border-b-pink-600 font-bold;
+}
+
+[data-chars-id="s"] {
+	@apply !text-yellow-300 bg-yellow-800/50 border-b-yellow-600 font-bold;
+}
+
+[data-chars-id="i"] {
+	@apply !text-purple-200 bg-purple-800/50 border-b-purple-600 font-bold;
+}
+
+[data-rehype-pretty-code-title] {
+	@apply bg-zinc-700 text-zinc-200 rounded-t-lg py-2 px-3 font-semibold text-sm;
+}
+
+figure[data-rehype-pretty-code-figure]:has(> [data-rehype-pretty-code-title])
+	pre {
+	@apply !rounded-t-none;
+}
+
+.dark span[data-rehype-pretty-code-figure] code {
+	@apply bg-zinc-600/50 rounded;
+	padding: 0.125rem 0.375rem;
+}
+
+span[data-rehype-pretty-code-figure] code {
+	@apply bg-[#353841] rounded mx-1;
+	padding: 0.125rem 0.375rem;
+}
+
+span[data-rehype-pretty-code-figure] code::before {
+	content: unset !important;
+}
+
+span[data-rehype-pretty-code-figure] code::after {
+	content: unset !important;
+}
+
+.dark p code {
+	@apply bg-zinc-600/50 rounded;
+	padding: 0.125rem 0.375rem;
+}
+
+p code {
+	@apply bg-[#353841] rounded mx-1 text-white !important;
+	padding: 0.125rem 0.375rem;
+}
+
+p code::before {
+	content: unset !important;
+}
+
+p code::after {
+	content: unset !important;
+}
+
+figure {
+	@apply mb-6 mt-1;
+}
+
+pre,
+code,
+figure {
+	@apply overflow-x-auto;
+}
+
+article p,
+blockquote p {
+	@apply leading-8 text-base;
+}
+
+ul > li,
+ol > li {
+	@apply text-base;
 }
 
 .subheading-anchor {
-	@apply no-underline hover:underline;
+	@apply no-underline;
+}
+
+/* 自定义横向滚动条样式 */
+code::-webkit-scrollbar {
+	height: 5px; /* 设置横向滚动条的高度 */
+}
+
+code::-webkit-scrollbar-track {
+	background: #f1f1f1; /* 轨道的背景颜色 */
+}
+
+code::-webkit-scrollbar-thumb {
+	background: #888; /* 滚动条滑块颜色 */
+	border-radius: 5px; /* 滚动条滑块的圆角 */
+}
+
+code::-webkit-scrollbar-thumb:hover {
+	background: #555; /* 滚动条滑块悬停时的颜色 */
+}
+
+code > span {
+	@apply text-base leading-8;
+	font-family: "JetBrains Mono", monospace;
 }

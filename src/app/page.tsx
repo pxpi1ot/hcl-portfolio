@@ -1,7 +1,6 @@
-"use client";
 import BlurFade from "@/components/magicui/blur-fade";
 import BlurFadeText from "@/components/magicui/blur-fade-text";
-
+import { NeonGradientCard } from "@/components/magicui/neon-gradient-card";
 import { ProjectCard } from "@/components/project-card";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -30,7 +29,7 @@ export default function Page() {
 				height="550"
 			></Image>
 			<section id="hero">
-				<div className="mx-auto w-full max-w-2xl space-y-8">
+				<div className="mx-auto w-full max-w-3xl space-y-8">
 					<div className="gap-2 flex justify-between">
 						<div className="flex-col flex flex-1 space-y-2">
 							<BlurFadeText
@@ -40,16 +39,18 @@ export default function Page() {
 								text={`Hi, I'm ${DATA.name.split(" ")[0]} 👋`}
 							/>
 							<BlurFadeText
-								className="max-w-[600px] md:text-xl"
+								className="max-w-[450px] md:text-xl"
 								delay={BLUR_FADE_DELAY}
 								text={DATA.description}
 							/>
 						</div>
 						<BlurFade delay={BLUR_FADE_DELAY * 2}>
-							<Avatar className="size-28 border">
-								<AvatarImage alt={DATA.name} src={DATA.avatarUrl} />
-								<AvatarFallback>{DATA.initials}</AvatarFallback>
-							</Avatar>
+							<NeonGradientCard borderRadius={9999} className="h-fit w-fit">
+								<Avatar className="size-28 border">
+									<AvatarImage alt={DATA.name} src={DATA.avatarUrl} />
+									<AvatarFallback>{DATA.initials}</AvatarFallback>
+								</Avatar>
+							</NeonGradientCard>
 						</BlurFade>
 					</div>
 				</div>
@@ -77,10 +78,6 @@ export default function Page() {
 								<div className="inline-block rounded-lg bg-foreground text-background px-3 py-1 text-sm">
 									我的作品
 								</div>
-
-								<p className="text-muted-foreground md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed">
-									查看我最近的作品
-								</p>
 							</div>
 						</div>
 					</BlurFade>
@@ -122,7 +119,9 @@ export default function Page() {
 							<BlurFade key={index} delay={BLUR_FADE_DELAY * 10 + index * 0.05}>
 								<div className="flex items-center gap-4">
 									{contact.icon}
-									<span className="text-muted-foreground">{contact.text}</span>
+									<span className="text-sm text-muted-foreground">
+										{contact.text}
+									</span>
 								</div>
 							</BlurFade>
 						))}

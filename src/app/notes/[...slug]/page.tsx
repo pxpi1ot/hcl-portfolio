@@ -2,7 +2,6 @@ import { posts } from "#site/content";
 import { MDXContent } from "@/components/mdx-components";
 import { notFound } from "next/navigation";
 
-import "@/styles/mdx.css";
 import { Metadata } from "next";
 import { formatDateOrDaysAgo } from "@/lib/utils";
 import BlurFade from "@/components/magicui/blur-fade";
@@ -91,7 +90,7 @@ export default async function PostPage({ params }: PostPageProps) {
       </div> */}
 			{post.description ? (
 				<BlurFade delay={BLUR_FADE_DELAY * 3}>
-					<p className="text-md  ">前文：{post.description}</p>
+					<p className="text-md ">前文：{post.description}</p>
 				</BlurFade>
 			) : null}
 			<BlurFade delay={BLUR_FADE_DELAY * 4}>

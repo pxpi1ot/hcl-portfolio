@@ -4,11 +4,10 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { DATA } from "@/data/resume";
 import { cn } from "@/lib/utils";
 import type { Metadata } from "next";
-import { Inter as FontSans } from "next/font/google";
+import { JetBrains_Mono } from "next/font/google";
 import "./globals.css";
-import Image from "next/image";
 
-const fontSans = FontSans({
+const font = JetBrains_Mono({
 	subsets: ["latin"],
 	variable: "--font-sans",
 });
@@ -58,8 +57,8 @@ export default function RootLayout({
 		<html lang="en" suppressHydrationWarning>
 			<body
 				className={cn(
-					"relative min-h-screen bg-background font-sans antialiased max-w-2xl mx-auto py-12 sm:pt-24 sm:pb-14 px-6",
-					fontSans.variable
+					"relative min-h-screen bg-background font-sans antialiased max-w-3xl mx-auto py-12 sm:pt-24 sm:pb-14 px-6",
+					font.variable
 				)}
 			>
 				<ThemeProvider attribute="class" defaultTheme="dark">

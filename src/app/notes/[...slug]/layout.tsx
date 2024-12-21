@@ -1,6 +1,7 @@
 "use client";
 
 import ScrollProgress from "@/components/magicui/scroll-progress";
+import "@/styles/mdx.css";
 
 interface Props {
 	children: React.ReactNode;

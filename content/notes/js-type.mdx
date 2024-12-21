@@ -11,7 +11,7 @@ In the quiet town of Reactville, developers live in harmony, crafting components
 </Callout>
 ## Introduction
 
-JavaScript中一共有8种基本的数据类型,分别是：`Number`, `String`, `Boolean`, `Null`, `Undefined`, `Symbol`, `BigInt`, `Object`。
+JavaScript中一共有8种基本的数据类型,分别是：`Number` `String` `Boolean`, `Null`, `Undefined`, `Symbol`, `BigInt`, `Object`。
 其中`Number`, `String`, `Boolean`, `Null`, `Undefined`, `Symbol`, `BigInt`是基本数据类型，`Object`是引用数据类型。
 
 我们可以将任何类型的值存入变量，例如：
@@ -434,8 +434,9 @@ function f() {
 
 ### 判断NaN
 
-1. `isNaN`函数
+1. `isNaN{:.comment}`函数
    `isNaN`函数用来判断一个值是否是`NaN`，它会先将参数转换为数字，然后再判断是否是`NaN`。
+
 
 ```javascript
 console.log(isNaN(NaN)) // true
@@ -543,3 +544,5 @@ var a
 ```
 
 var声明的变量会在代码执行前进行变量提升，初始化为undefined。而let声明的变量在声明前处于未初始化（uninitialized）状态，尝试访问这些变量会导致ReferenceError。
+
+[JavaScript Performance](https://frontendmasters.com/courses/web-performance/how-web-pages-are-built/)
