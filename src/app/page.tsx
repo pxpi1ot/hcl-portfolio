@@ -61,9 +61,47 @@ export default function Page() {
 					<BlurFade delay={BLUR_FADE_DELAY * 3}>
 						<h2 className="text-xl font-bold">技能</h2>
 					</BlurFade>
-					<div className="flex flex-wrap gap-1">
-						{DATA.skills.map((skill, id) => (
-							<BlurFade key={skill} delay={BLUR_FADE_DELAY * 4 + id * 0.05}>
+					<div className="flex flex-wrap gap-1 items-center">
+						<BlurFade delay={BLUR_FADE_DELAY * 4}>
+							<Badge variant="emerald">前端</Badge>
+						</BlurFade>
+
+						{DATA.skills.frontend.map((skill, id) => (
+							<BlurFade key={skill} delay={BLUR_FADE_DELAY * 5 + id * 0.05}>
+								<Badge key={skill}>{skill}</Badge>
+							</BlurFade>
+						))}
+					</div>
+
+					<div className="flex flex-wrap gap-1 items-center">
+						<BlurFade delay={BLUR_FADE_DELAY * 6}>
+							<Badge variant="blue">后端</Badge>
+						</BlurFade>
+
+						{DATA.skills.backend.map((skill, id) => (
+							<BlurFade key={skill} delay={BLUR_FADE_DELAY * 7 + id * 0.05}>
+								<Badge key={skill}>{skill}</Badge>
+							</BlurFade>
+						))}
+					</div>
+					<div className="flex flex-wrap gap-1 items-center">
+						<BlurFade delay={BLUR_FADE_DELAY * 8}>
+							<Badge variant="pink">数据库</Badge>
+						</BlurFade>
+
+						{DATA.skills.databases.map((skill, id) => (
+							<BlurFade key={skill} delay={BLUR_FADE_DELAY * 9 + id * 0.05}>
+								<Badge key={skill}>{skill}</Badge>
+							</BlurFade>
+						))}
+					</div>
+					<div className="flex flex-wrap gap-1 items-center">
+						<BlurFade delay={BLUR_FADE_DELAY * 10}>
+							<Badge variant="destructive">其他</Badge>
+						</BlurFade>
+
+						{DATA.skills.other.map((skill, id) => (
+							<BlurFade key={skill} delay={BLUR_FADE_DELAY * 11 + id * 0.05}>
 								<Badge key={skill}>{skill}</Badge>
 							</BlurFade>
 						))}
@@ -72,7 +110,7 @@ export default function Page() {
 			</section>
 			<section id="projects">
 				<div className="space-y-12 w-full py-12">
-					<BlurFade delay={BLUR_FADE_DELAY * 7}>
+					<BlurFade delay={BLUR_FADE_DELAY * 12}>
 						<div className="flex flex-col items-center justify-center space-y-4 text-center">
 							<div className="space-y-2">
 								<div className="inline-block rounded-lg bg-foreground text-background px-3 py-1 text-sm">
@@ -85,7 +123,7 @@ export default function Page() {
 						{DATA.projects.map((project, id) => (
 							<BlurFade
 								key={project.title}
-								delay={BLUR_FADE_DELAY * 8 + id * 0.05}
+								delay={BLUR_FADE_DELAY * 13 + id * 0.05}
 							>
 								<ProjectCard
 									href={project.href}
@@ -106,7 +144,7 @@ export default function Page() {
 
 			<section id="contact">
 				<div className="space-y-12 w-full py-12  relative mx-auto flex max-w-2xl flex-col rounded-2xl p-8 shadow-sm ">
-					<BlurFade delay={BLUR_FADE_DELAY * 9}>
+					<BlurFade delay={BLUR_FADE_DELAY * 14}>
 						<div className="flex flex-col items-center justify-center space-y-4 text-center">
 							<div className="inline-block rounded-lg bg-foreground text-background px-3 py-1 text-sm">
 								联系我
@@ -116,7 +154,7 @@ export default function Page() {
 
 					<div className="space-y-5">
 						{DATA.contact.details.map((contact, index) => (
-							<BlurFade key={index} delay={BLUR_FADE_DELAY * 10 + index * 0.05}>
+							<BlurFade key={index} delay={BLUR_FADE_DELAY * 15 + index * 0.05}>
 								<div className="flex items-center gap-4">
 									{contact.icon}
 									<span className="text-sm text-muted-foreground">

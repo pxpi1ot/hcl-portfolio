@@ -76,7 +76,7 @@ export default async function PostPage({ params }: PostPageProps) {
 	return (
 		<article className="container py-6 prose dark:prose-invert ">
 			<BlurFade delay={BLUR_FADE_DELAY}>
-				<h1 className="mb-2">{post.title}</h1>
+				<h2 className="mb-2">{post.title}</h2>
 			</BlurFade>
 			<BlurFade delay={BLUR_FADE_DELAY * 2}>
 				<p className="mt-2 h-6 text-muted-foreground">

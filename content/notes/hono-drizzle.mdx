@@ -1,0 +1,122 @@
+---
+title: 使用Hono和Drizzle快速构建REST API
+description: ""
+date: 2024-03-04
+tags: ["Hono", "Drizzle"]
+published: true
+---
+<Callout>
+Hono 是一个快速、轻量级、基于 Web 标准构建。支持任何 JavaScript 运行时的Web 应用程序框架。写法于Express类似，但更高效、轻量化，原生支持TypeScript类型推导等特性。Drizzle ORM 是一个 TypeScript ORM。具有轻量级的、高性能的、类型安全的特点。支持多种数据库，如MySQL、PostgreSQL、SQLite等。本文主要介绍使用Hono和Drizzle快速搭建REST API。
+</Callout>
+### 基本应用结构
+创建一个简单的Hono应用：
+```js title="src/index.ts"
+import { Hono } from 'hono'
+
+const app = new Hono()
+
+app.get('/', (c) => {
+  return c.text('Hello Hono!')
+})
+
+export default app
+```
+### 路由方法
+支持所有HTTP方法：
+- `app.get(path, handler){:js}`
+- `app.post(path, handler){:js}`
+- `app.put(path, handler){:js}`
+- `app.delete(path, handler){:js}`
+
+### 配置Drizzle ORM
+由于只是简单介绍用法，所以数据库我使用了Neon PostgreSQL。
+```js title="src/db/index.ts"
+import { drizzle } from 'drizzle-orm/neon-http';
+//在.env文件中配置DATABASE_URL
+export const db = drizzle(process.env.DATABASE_URL!); 
+```
+### 创建表
+在`src/db`目录下创建`schema.ts`文件，这里创建一个users表。Drizzle的一些写法和原生sql类似。
+```js title="src/db/schema.ts"
+import { integer, pgTable, text, timestamp, } from "drizzle-orm/pg-core";
+export const usersTable = pgTable("users_table", {
+    id: integer().primaryKey().generatedAlwaysAsIdentity(),
+    name: text().notNull(),
+    age: integer().notNull(),
+    email: text().notNull().unique(),
+
+    createdAt: timestamp('created_at', { withTimezone: true }).defaultNow(),
+    updatedAt: timestamp('updated_at', { withTimezone: true }).defaultNow(),
+}
+);
+```
+### drizzle-kit
+使用`drizzle-kit push{:.keyword.operator.spread}`命令直接将更改应用于数据库。
+```bash
+bunx drizzle-kit push
+或者
+npx drizzle-kit push
+```
+### 在Hono中使用Drizzle
+示例代码：
+```js title="src/index.ts" showLineNumbers {8}
+import { Hono } from 'hono'
+
+const app = new Hono()
+
+app.get('/', (c) => {
+  return c.text('Hello Hono!')
+})
+app.route("/users", usersRoute)
+
+export default app
+```
+Drizzle的使用语法：
+
+```js title="/src/routes/users-route.ts" showLineNumbers {10,15,20,26,30,37}
+import { Hono } from "hono";
+import { db } from "../db";
+import { usersTable } from "../db/schema";
+import { eq } from "drizzle-orm";
+
+const usersRoute = new Hono()
+
+usersRoute
+    .get("/", async (c) => {
+        const users = await db.select().from(usersTable)
+        return c.json(users)
+    })
+    .post("/", async (c) => {
+        const { name, age, email } = await c.req.json();
+        const newUser = await db.insert(usersTable).values({ name, age, email });
+        return c.json(newUser);
+    })
+    .get("/:id", async (c) => {
+        const { id } = c.req.param();
+        const user = await db.select().from(usersTable).where(eq(usersTable.id, Number(id)));
+        return c.json(user);
+    })
+    .patch("/:id", async (c) => {
+        const { id } = c.req.param();
+        const { name, age, email } = await c.req.json();
+        const updatedUserResult = await db.update(usersTable).set({ name, age, email }).where(eq(usersTable.id, Number(id)));
+        if (!updatedUserResult) {
+            return c.json({ error: "User not found" }, 404);
+        }
+        const updatedUser = await db.select().from(usersTable).where(eq(usersTable.id, Number(id)));
+
+        return c.json(updatedUser);
+    })
+    .delete("/:id", async (c) => {
+
+        const { id } = c.req.param();
+        const deletedUser = await db.delete(usersTable).where(eq(usersTable.id, Number(id)));
+        return c.json(deletedUser);
+    });
+
+
+export default usersRoute
+```
+### 参考资料
+* Drizzle ORM: [https://orm.drizzle.team](https://orm.drizzle.team/)
+* Hono: [https://hono.dev](https://hono.dev/)

@@ -382,7 +382,8 @@
             "scope": [
                 "entity.name.function",
                 "variable.function",
-                "keyword.other.special-method"
+                "keyword.other.special-method",
+                "function"
             ],
             "settings": {
                 "foreground": "#82aaff"

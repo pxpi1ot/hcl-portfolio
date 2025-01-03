@@ -7,19 +7,23 @@ import { motion } from "framer-motion";
 import {
 	formatDateOrDaysAgo,
 	getAllTags,
+	getPostsByTagSlug,
 	sortPosts,
 	sortTagsByCount,
 } from "@/lib/utils";
 import { QueryPagination } from "@/components/query-pagination";
 import { Tag } from "@/components/tags";
-
+import { slug } from "github-slugger";
 // export const metadata = {
 // 	title: "Notes",
 // 	description: "My ramblings all things web dev.",
 // };
 const POSTS_PER_PAGE = 5;
 
-interface BlogPageProps {
+interface Props {
+	params: {
+		tag: string;
+	};
 	searchParams: {
 		page?: string;
 	};
@@ -44,10 +48,14 @@ const textBlur = {
 
 const BLUR_FADE_DELAY = 0.04;
 
-export default function BlogPage({ searchParams }: BlogPageProps) {
+export default function TagPage({ params, searchParams }: Props) {
 	const currentPage = Number(searchParams?.page) || 1;
 	const tags = getAllTags(posts);
-	const sortedPosts = sortPosts(posts.filter(post => post.published));
+	const { tag } = params;
+	const allPosts = getPostsByTagSlug(posts, tag);
+	const title = tag.split("-").join(" ");
+
+	const sortedPosts = sortPosts(allPosts.filter(post => post.published));
 	const sortedTags = sortTagsByCount(tags);
 
 	const totalPages = Math.ceil(sortedPosts.length / POSTS_PER_PAGE);
@@ -62,8 +70,7 @@ export default function BlogPage({ searchParams }: BlogPageProps) {
 			<section className="space-y-8">
 				{currentPage <= 1 ? (
 					<BlurFade delay={BLUR_FADE_DELAY}>
-						<h1 className="font-medium text-2xl mb-8">笔记</h1>
-						<p className="text-muted-foreground">我关于WEB开发的各种随笔。</p>
+						<h1 className="font-medium text-2xl mb-8">{title}</h1>
 					</BlurFade>
 				) : null}
 

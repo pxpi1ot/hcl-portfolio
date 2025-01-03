@@ -32,6 +32,15 @@ p a:hover {
 	text-decoration: underline !important;
 }
 
+ul > li > a {
+	@apply text-blue-500 !important;
+	text-decoration: none !important;
+}
+
+ul > li > a:hover {
+	text-decoration: underline !important;
+}
+
 a > code {
 	text-decoration: none !important;
 	text-decoration-style: unset !important;
@@ -154,23 +163,27 @@ pre [data-line] {
 }
 
 [data-chars-id] {
-	@apply shadow-none px-1 py-0.5  border-b-2;
+	@apply shadow-none px-1 py-0.5;
 }
 
 [data-chars-id] span {
 	@apply !text-inherit;
 }
 
-[data-chars-id="v"] {
-	@apply !text-pink-300 bg-rose-800/50 border-b-pink-600 font-bold;
+[data-chars-id="red"] {
+	@apply !text-pink-300 bg-rose-800/50  font-bold;
 }
 
-[data-chars-id="s"] {
-	@apply !text-yellow-300 bg-yellow-800/50 border-b-yellow-600 font-bold;
+[data-chars-id="yellow"] {
+	@apply !text-yellow-300 bg-yellow-800/50 font-bold;
 }
 
-[data-chars-id="i"] {
-	@apply !text-purple-200 bg-purple-800/50 border-b-purple-600 font-bold;
+[data-chars-id="blue"] {
+	@apply !text-blue-300 bg-blue-800/50 font-bold;
+}
+
+[data-chars-id="purple"] {
+	@apply !text-purple-200 bg-purple-800/50  font-bold;
 }
 
 [data-rehype-pretty-code-title] {
@@ -206,7 +219,7 @@ span[data-rehype-pretty-code-figure] code::after {
 }
 
 p code {
-	@apply bg-[#353841] rounded mx-1 text-white !important;
+	@apply bg-[#353841] rounded mx-1 text-[#c8d3f5] !important;
 	padding: 0.125rem 0.375rem;
 }
 
@@ -261,6 +274,6 @@ code::-webkit-scrollbar-thumb:hover {
 }
 
 code > span {
-	@apply text-base leading-8;
+	@apply text-sm leading-8;
 	font-family: "JetBrains Mono", monospace;
 }

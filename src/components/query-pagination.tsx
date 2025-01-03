@@ -42,21 +42,23 @@ export function QueryPagination({
 					</PaginationItem>
 				) : null}
 
-				{Array(totalPages)
-					.fill("")
-					.map((_, index) => (
-						<PaginationItem
-							className="hidden sm:inline-block"
-							key={`page-button-${index}`}
-						>
-							<PaginationLink
-								isActive={currentPage === index + 1}
-								href={createPageURL(index + 1)}
-							>
-								{index + 1}
-							</PaginationLink>
-						</PaginationItem>
-					))}
+				{totalPages > 1
+					? Array(totalPages)
+							.fill("")
+							.map((_, index) => (
+								<PaginationItem
+									className="inline-block"
+									key={`page-button-${index}`}
+								>
+									<PaginationLink
+										isActive={currentPage === index + 1}
+										href={createPageURL(index + 1)}
+									>
+										{index + 1}
+									</PaginationLink>
+								</PaginationItem>
+							))
+					: null}
 
 				{nextPage <= totalPages ? (
 					<PaginationItem>
