@@ -210,7 +210,7 @@ function Timer() {
       setCount(prevCount => prevCount + 1);
     }, 1000);
 
-    // 返回清理函数，组件卸载时清除定时器
+    // 返回清理函数，组件卸载时和下一次执行回调时清除定时器
     return () => clearInterval(interval);
   }, []); // 空依赖数组，表示只在挂载时设置定时器
 
@@ -251,7 +251,7 @@ useEffect(() => {
   console.log('每次渲染都会执行');
 });
 ```
-- 空依赖数组 `[]{:js}`：`useEffect{:js}` 只会在组件挂载和卸载时运行。
+- 空依赖数组 `[]{:js}`：`useEffect{:js}` 只会在组件初次渲染时运行。
 - 省略依赖数组：`useEffect{:js}` 会在每次组件渲染时运行，类似于类组件中的 `componentDidMount{:js}` 和 `componentDidUpdate{:js}`。
 ### 3.useRef
 useRef 是 React 提供的一个 Hook
