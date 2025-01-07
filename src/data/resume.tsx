@@ -27,7 +27,7 @@ export const DATA = {
 		],
 		backend: ["Node.js", "Hono.js", "Express", "Drizzle ORM"],
 		databases: ["PostgresSQL", "MySQL"],
-		other: ["Typescript", "Javascript", "Docker"],
+		other: ["Typescript", "Javascript", "Vite", "Docker"],
 	},
 	navbar: [
 		{ href: "/", icon: HomeIcon, label: "主页" },

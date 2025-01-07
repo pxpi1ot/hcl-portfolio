@@ -1,0 +1,264 @@
+---
+title: React 中常用的 Hook 介绍（二）
+description: ""
+date: 2023-06-18
+tags: ["React"]
+published: true
+---
+### 5.useLayoutEffect
+<Callout type="warning">
+`useLayoutEffect` 可能会损害性能。尽可能使用 `useEffect`。
+</Callout>
+`useLayoutEffect` 是 `useEffect` 的一个版本，在浏览器重新绘制屏幕之前触发。
+#### 使用场景
+```js showLineNumbers {7-12}
+import React, { useLayoutEffect, useRef, useState } from 'react';
+
+function LayoutEffectExample() {
+  const [width, setWidth] = useState(0);
+  const divRef = useRef(null);
+
+  useLayoutEffect(() => {
+    // 在浏览器绘制之前读取 DOM 的宽度
+    if (divRef.current) {
+      setWidth(divRef.current.offsetWidth);
+    }
+  });
+
+  return (
+    <div ref={divRef} style={{ width: '50%' }}>
+      The width of this div is: {width}px
+    </div>
+  );
+}
+
+export default LayoutEffectExample;
+```
+大致与 `useEffect` 相同，但 `useLayoutEffect` 会在浏览器绘制之前同步触发，可以避免闪烁或布局问题。由于会阻碍浏览器的绘制，所以频繁使用可能会导致性能问题。
+### 6.useMemo
+`useMemo`主要用于性能优化，通过缓存计算结果避免不必要的重复计算。它接受一个创建函数和一个依赖数组，当依赖数组中的值发生变化时才重新计算结果，否则会返回之前缓存的结果。
+#### 基本语法
+```js
+const memoizedValue = useMemo(() => computeExpensiveValue(a, b), [a, b]);
+```
+#### 适用场景
+- 当某些计算代价较高（如复杂运算、大数组排序等），并且依赖项在大多数情况下不会频繁变化时，使用 useMemo 可以显著提升性能。
+- 如果父组件重新渲染时，传给子组件的某些 props 是通过计算得出的，可以用 useMemo 来缓存这些计算结果，避免子组件因 props 变化而不必要的重新渲染。
+```js title="缓存计算结果"
+import React, { useState, useMemo } from 'react';
+
+function ExpensiveComputation() {
+  const [count, setCount] = useState(0);
+  const [text, setText] = useState('');
+
+  const expensiveValue = useMemo(() => {
+    console.log('Computing...');
+    return count * 10;
+  }, [count]);
+
+  return (
+    <div>
+      <h1>Count: {count}</h1>
+      <h2>Expensive Value: {expensiveValue}</h2>
+      <button onClick={() => setCount(count + 1)}>Increment</button>
+      <input value={text} onChange={(e) => setText(e.target.value)} />
+    </div>
+  );
+}
+```
+```js title="避免子组件不必要的渲染"
+import React, { useState, useMemo , memo} from 'react';
+
+const ChildComponent = memo(function ChildComponent({ data }) {
+  console.log('ChildComponent rendered')
+  return <div>Received number: {data.num}</div>;
+})
+
+
+function ParentComponent() {
+  const [count, setCount] = useState(0);
+  const memoizedValue = useMemo(() => ({ num: count }), [count]);
+
+  return (
+    <div>
+      <h1>Count: {count}</h1>
+      <ChildComponent data={memoizedValue} />
+      <button onClick={() => setCount(count + 1)}>Increment</button>
+    </div>
+  );
+}
+```
+- 使用 `useMemo{:js}` 缓存传给 `ChildComponent{:js}` 的 `data{:js}` 对象，避免在 `count{:js}` 未变化时，`data{:js}` 引用发生变化导致子组件重新渲染。
+### 7.useCallback
+用于缓存回调函数的引用，避免不必要的重新创建。它的作用类似于 `useMemo`，不过 `useCallback` 关注的是函数的缓存，而 `useMemo` 关注的是计算结果的缓存。
+#### 基本语法
+```js
+const memoizedCallback = useCallback(() => {
+  // 回调函数逻辑
+}, [dependency1, dependency2]);
+```
+#### 适用场景
+- **将回调函数传递给子组件：**
+当回调函数通过 `props{:js}` 传递给子组件时，如果每次父组件重新渲染时回调函数的引用都发生变化，会导致子组件不必要的重新渲染。使用 `useCallback{:js}` 可以缓存回调函数，避免这种情况。
+- **依赖于稳定函数的 `useEffect{:js}` 或其他 Hook：**
+如果 `useEffect{:js}` 的依赖中包含一个回调函数，但该函数每次渲染时都会被重新创建，会导致 `useEffect{:js}` 无条件重新执行。通过 `useCallback{:js}` 缓存函数引用，可以避免这种问题。
+```js title="避免子组件不必要的渲染"
+import React, { useState, useCallback } from 'react';
+
+
+function ChildComponent({ onClick }) {
+  console.log('ChildComponent rendered');
+  return <button onClick={onClick}>Click me</button>;
+}
+
+function ParentComponent() {
+  const [count, setCount] = useState(0);
+  const [text, setText] = useState('');
+
+  // 使用 useCallback 缓存 handleClick 函数
+  const handleClick = useCallback(() => {
+    console.log('Button clicked');
+  }, []);
+
+  return (
+    <div>
+      <h1>Count: {count}</h1>
+      <button onClick={() => setCount(count + 1)}>Increment</button>
+      <input value={text} onChange={(e) => setText(e.target.value)} />
+      
+      {/* 将回调函数传递给子组件 */}
+      <ChildComponent onClick={handleClick} />
+    </div>
+  );
+}
+
+export default ParentComponent;
+```
+- **未使用`useCallback{:js}`前：**
+每次父组件重新渲染时（比如`count{:js}`或`text{:js}`发生变化），`handleClick{:js}`都会重新创建新的函数引用，导致`ChildComponent{:js}`被迫重新渲染。
+
+- **使用`useCallback{:js}`后：**
+`handleClick{:js}`的引用在初次渲染后会被缓存，只有当依赖数组中的值发生变化时（这里是空数组，即不会变化），才会创建新的引用，从而避免了子组件的无意义重新渲染。
+```js title="稳定依赖的 useEffect"
+import React, { useState, useCallback, useEffect } from 'react';
+
+function Timer() {
+  const [count, setCount] = useState(0);
+
+  const logCount = useCallback(() => {
+    console.log(`Current count: ${count}`);
+  }, [count]);
+
+  useEffect(() => {
+    const id = setInterval(logCount, 1000);
+    return () => clearInterval(id);
+  }, [logCount]);
+
+  return (
+    <div>
+      <h1>Count: {count}</h1>
+      <button onClick={() => setCount(count + 1)}>Increment</button>
+    </div>
+  );
+}
+
+export default Timer;
+```
+- **未使用`useCallback{:js}`前：**
+如果直接将`logCount{:js}`函数传给`useEffect{:js}`，由于`logCount{:js}`每次渲染时都会重新创建，`useEffect{:js}` 的依赖总是发生变化，导致每次渲染都重新设置`setInterval{:js}`。
+
+- **使用`useCallback{:js}`后：**
+`logCount{:js}`的引用只有在`count{:js}`发生变化时才会改变，因此`useEffect{:js}`只会在必要时重新执行，避免了频繁重启计时器。
+### 8.useReducer
+`useReducer`提供了一种替代 `useState` 的方式来管理复杂的组件状态。它特别适合状态逻辑复杂或涉及多个子状态的场景，使用 **reducer 模式**（类似于 `Redux` 中的 `reducer`）来更新状态。
+使用 `useReducer` 时，将所有状态更新逻辑集中在 `reducer` 函数中，组件的代码更简洁、可维护性更高。
+#### 基本语法
+```js
+const [state, dispatch] = useReducer(reducer, initialState);
+```
+- `reducer{:js}`：一个纯函数，接收当前状态和一个动作（`action{:js}`），返回新的状态。
+- `initialState{:js}`：初始状态，可以是任意类型。
+- `dispatch{:js}`：一个函数，用于分发动作（`action{:js}`），触发状态更新。
+#### 示例用法
+```js title="计数器"
+import React, { useReducer } from 'react';
+
+// 定义 reducer 函数
+function reducer(state, action) {
+  switch (action.type) {
+    case 'increment':
+      return { count: state.count + 1 };
+    case 'decrement':
+      return { count: state.count - 1 };
+    case 'reset':
+      return { count: 0 };
+    default:
+      throw new Error('Unknown action type');
+  }
+}
+
+function Counter() {
+  const [state, dispatch] = useReducer(reducer, { count: 0 });
+
+  return (
+    <div>
+      <h1>Count: {state.count}</h1>
+      <button onClick={() => dispatch({ type: 'increment' })}>Increment</button>
+      <button onClick={() => dispatch({ type: 'decrement' })}>Decrement</button>
+      <button onClick={() => dispatch({ type: 'reset' })}>Reset</button>
+    </div>
+  );
+}
+
+export default Counter;
+```
+```js title="管理表单状态"
+import React, { useReducer } from 'react';
+
+// 定义 reducer 函数
+function reducer(state, action) {
+  switch (action.type) {
+    case 'updateField':
+      return { ...state, [action.field]: action.value };
+    case 'reset':
+      return { name: '', email: '' };
+    default:
+      throw new Error('Unknown action type');
+  }
+}
+
+function Form() {
+  const [state, dispatch] = useReducer(reducer, { name: '', email: '' });
+
+  const handleChange = (e) => {
+    dispatch({ type: 'updateField', field: e.target.name, value: e.target.value });
+  };
+
+  return (
+    <div>
+      <input
+        name="name"
+        value={state.name}
+        onChange={handleChange}
+        placeholder="Name"
+      />
+      <input
+        name="email"
+        value={state.email}
+        onChange={handleChange}
+        placeholder="Email"
+      />
+      <button onClick={() => dispatch({ type: 'reset' })}>Reset</button>
+      <h2>Preview:</h2>
+      <p>Name: {state.name}</p>
+      <p>Email: {state.email}</p>
+    </div>
+  );
+}
+
+export default Form;
+```
+#### 何时使用 useReducer ？
+- 状态复杂且互相关联时，`useReducer{:js}` 比 `useState{:js}` 更合适。例如，表单中多个字段的状态更新逻辑较复杂时。
+- 状态更新逻辑复杂且需要根据不同的动作类型执行不同的逻辑。
+- 希望复用状态更新逻辑，`reducer{:js}` 函数可以单独提取出来，供多个组件使用。

@@ -13,7 +13,7 @@ const BLUR_FADE_DELAY = 0.04;
 
 export default function Page() {
 	return (
-		<main className="flex flex-col min-h-[100dvh] space-y-10">
+		<main className="flex flex-col min-h-[100dvh] space-y-10 ">
 			<Image
 				className="absolute left-1/2 top-0 -z-10 -translate-x-1/2"
 				src="/gradient-background-top.webp"
