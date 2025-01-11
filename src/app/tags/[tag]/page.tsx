@@ -70,7 +70,7 @@ export default function TagPage({ params, searchParams }: Props) {
 			<section className="space-y-8">
 				{currentPage <= 1 ? (
 					<BlurFade delay={BLUR_FADE_DELAY}>
-						<h1 className="font-medium text-2xl mb-8">{title}</h1>
+						<h1 className="font-medium text-2xl mb-8">{`${title} (${sortedPosts.length})`}</h1>
 					</BlurFade>
 				) : null}
 

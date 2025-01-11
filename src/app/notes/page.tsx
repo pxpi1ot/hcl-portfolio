@@ -62,7 +62,9 @@ export default function BlogPage({ searchParams }: BlogPageProps) {
 			<section className="space-y-8">
 				{currentPage <= 1 ? (
 					<BlurFade delay={BLUR_FADE_DELAY}>
-						<h1 className="font-medium text-2xl mb-8">笔记</h1>
+						<h1 className="font-medium text-2xl mb-8">
+							笔记 {`(${sortedPosts.length})`}
+						</h1>
 						<p className="text-muted-foreground">我关于WEB开发的各种随笔。</p>
 					</BlurFade>
 				) : null}

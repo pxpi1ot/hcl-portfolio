@@ -1,0 +1,61 @@
+---
+title: 使用 Vite 发布 npm 包
+description: ""
+date: 2024-06-13
+tags: ["Vite"]
+published: true
+---
+### 项目准备
+准备好一个`vite`项目，在`vite.config.js{:js}`中做好打包配置。
+```js title="vite.config.js"
+export default {
+  build: {
+    lib: {
+      // 配置库的入口文件
+      entry: [
+        resolve(__dirname, 'src/index.js'),
+        resolve(__dirname, 'src/log.js')
+      ],
+      // 库的全局变量名
+      name: 'Pluck',
+      // 定义输出文件的名称
+      fileName: (format, name) => {
+        if (format === 'es') {
+          return `${name}.js`
+        }
+        return `${name}.${format}`
+      }
+    },
+    // Rollup 配置选项
+    rollupOptions: {
+      // 外部依赖，不打包到库中
+      external: ['collect.js']
+    }
+  }
+}
+```
+然后在`package.json{:js}`中做好发包配置。
+```json title="package.json"
+{
+  "name": "pluck",
+  "version": "0.0.6",
+  "type": "module",
+  "files": [  //指定发布到 npm 的文件或目录。
+    "dist"  
+  ],
+  "main": "./dist/index.cjs",  //包的 CommonJS 入口文件。
+  "module": "./dist/index.js", //包的 ES 模块入口文件。
+ 
+ //...
+}
+```
+做好配置之后，就可以发布`npm`包了。
+- 根据需要设置`registry`源。  
+```ansi
+> npm config get registry  //获取当前配置的 npm 注册表
+> npm config set registry https://xxxxxx.xxxxx.xxx  //配置npm注册表
+> npm login //登录npm
+> npm publish //发布npm包
+```
+
+
