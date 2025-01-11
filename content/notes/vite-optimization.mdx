@@ -1,7 +1,127 @@
 ---
-title: 使用 Vite 进行性能优化
+title: 使用 Vite 进行项目优化
 description: ""
 date: 2024-06-11
 tags: ["Vite"]
 published: true
 ---
+### 分包策略
+在使用`Vite`进行项目构建时，默认情况下，所有的`JavaScript`代码会打包成一个文件。然而，随着项目规模的增长，单个文件可能会变得过大，影响加载性能。因此，分包`(Code Splitting)`是一个常见的优化手段，它可以将代码拆分成多个较小的包，按需加载，从而提升应用的加载速度和性能。  
+`Vite`基于`Rollup`进行构建，因此可以使用`Rollup`的配置来实现分包，将不经常变动的代码放到其他包里。以下是几种常见的分包策略：
+#### 1.将所有 node_modules 依赖打包到一个文件中
+```js title="vite.config.js"
+import { defineConfig } from 'vite';
+
+export default defineConfig({
+  build: {
+    rollupOptions: {
+      output: {
+        manualChunks(id) {
+          if (id.includes('node_modules')) {
+            // 将所有 node_modules 中的依赖打包到 vendor 文件中
+            return 'vendor';
+          }
+        },
+      },
+    },
+  },
+});
+```
+#### 2.将 node_modules 中的依赖分开打包
+```js title="vite.config.js"
+import { defineConfig } from 'vite';
+
+export default defineConfig({
+  build: {
+    rollupOptions: {
+      output: {
+        manualChunks(id) {
+          if (id.includes('node_modules')) {
+            // 将每个依赖单独打包
+            return id.toString().split('node_modules/')[1].split('/')[0];
+          }
+        },
+      },
+    },
+  },
+});
+```
+#### 3.按依赖分组打包
+```js title="vite.config.js"
+import { defineConfig } from 'vite';
+
+export default defineConfig({
+  build: {
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          // 将 react 相关的依赖打包到一起
+          react: ['react', 'react-dom', 'react-router'],
+          // 将 lodash 单独打包
+          lodash: ['lodash'],
+          // 将其他依赖打包到 vendor 文件中
+          vendor: ['axios', 'moment'],
+        },
+      },
+    },
+  },
+});
+```
+#### 4.动态导入
+动态导入`import(){:js}`是`Vite`中实现按需加载的主要方式。通过动态导入，`Vite`会自动将模块拆分成单独的包，并在需要时加载。
+```js
+// 动态导入的模块会被拆分成单独的包
+const module = await import('./module.js');
+```
+#### 分包的优势
+- **减少初始加载时间**：通过将代码拆分成多个包，可以减少初始加载的文件大小，提升页面加载速度。
+- **按需加载**：只有在需要时才加载某些模块，减少不必要的资源消耗。
+- **缓存优化**：将不经常变动的第三方库单独打包，可以利用浏览器缓存，减少重复加载。
+#### 分包的注意事项
+- **避免过度分包**：过多的包可能会导致`HTTP{:js}`请求数量增加，尤其是在不支持`HTTP/2{:js}`的环境中。需要根据项目规模和依赖数量，合理控制包的数量和大小。
+- **动态导入**：动态导入会增加额外的网络请求，因此需要权衡模块的大小和加载频率。
+### Gzip压缩
+`Vite`社区提供了`vite-plugin-compression{:js}`插件，可以在构建时生成`Gzip`压缩文件。
+```js title="vite.config.js"
+import { defineConfig } from 'vite';
+import viteCompression from 'vite-plugin-compression';
+
+export default defineConfig({
+  plugins: [
+    viteCompression({
+      verbose: true, // 是否在控制台输出压缩结果
+      disable: false, // 是否禁用插件
+      threshold: 10240, // 文件大于 10KB 时才压缩
+      algorithm: 'gzip', // 压缩算法，默认为 gzip
+      ext: '.gz', // 生成的压缩文件后缀
+    }),
+  ],
+});
+```
+### 图片优化
+可以使用`vite-plugin-image-optimizer`插件进行图片优化。`vite-plugin-image-optimizer`是一个用于优化图片的`Vite`插件，它可以在构建过程中自动压缩和优化图片文件，支持多种图片格式（如`JPEG`、`PNG`、`GIF`、`SVG`等）。通过使用该插件，可以减少图片文件的大小，从而提升页面加载速度和性能。  
+在`vite.config.js`中配置插件。可以根据需要自定义压缩选项。
+```js title="vite.config.js示例配置"
+import { defineConfig } from 'vite';
+import { imageOptimizer } from 'vite-plugin-image-optimizer';
+
+export default defineConfig({
+  plugins: [
+    imageOptimizer({
+      include: ['**/*.{jpg,jpeg,png,gif,svg}'], // 处理的图片格式
+      exclude: 'public/**', // 排除 public 目录
+      jpeg: { quality: 75 }, // JPEG 压缩配置
+      png: { quality: 75 }, // PNG 压缩配置
+      gif: { optimizationLevel: 3 }, // GIF 压缩配置
+      svg: { // SVG 压缩配置
+        plugins: [
+          { name: 'removeViewBox', active: false },
+          { name: 'removeEmptyAttrs', active: false },
+        ],
+      },
+    }),
+  ],
+});
+```
+配置完成后，执行`npm run build{:bash}`，可以发现图片被压缩了。
+![](https://cdn3.easylink.cc/273529c4-1782-4b25-a759-9a577cd1fe7a_%E5%9B%BE%E7%89%87%E4%BC%98%E5%8C%96.png?e=1736610987&token=J_WyMIdhZtwb0E0QHWRqEfQrd5lVSWLffl9QxaxP:FoRKPzg5zT_6CBJolR_5btxIa4A=)
