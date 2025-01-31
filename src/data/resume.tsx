@@ -15,19 +15,9 @@ export const DATA = {
 		"At the end of 2022, I quit my job as a software engineer to go fulltime into building and scaling my own SaaS businesses. In the past, [I pursued a double degree in computer science and business](/#education), [interned at big tech companies in Silicon Valley](https://www.youtube.com/watch?v=d-LJ2e5qKdE), and [competed in over 21 hackathons for fun](/#hackathons). I also had the pleasure of being a part of the first ever in-person cohort of buildspace called [buildspace sf1](https://buildspace.so/sf1).",
 	avatarUrl: "/me.png",
 	skills: {
-		frontend: [
-			"React",
-			"Next.js",
-			"Vue",
-			"Uniapp",
-			"ECharts",
-			"TailwindCSS",
-			"ShadcnUI",
-			"Ant Design",
-		],
-		backend: ["Node.js", "Hono.js", "Express", "Drizzle ORM"],
-		databases: ["PostgresSQL", "MySQL"],
-		other: ["Typescript", "Javascript", "Vite", "Docker"],
+		frontend: ["React", "Next.js", "Vue", "Uniapp", "TailwindCSS"],
+		backend: ["Node.js", "Hono", "Nest", "Express", "Prisma ORM"],
+		other: ["Typescript", "Javascript", "Vite", "Docker", "MySQL"],
 	},
 	navbar: [
 		{ href: "/", icon: HomeIcon, label: "主页" },
@@ -77,8 +67,40 @@ export const DATA = {
 
 	projects: [
 		{
+			title: "任务管理系统",
+			href: "https://live-docs.pxpilot.icu",
+
+			active: true,
+			description:
+				"具有表格、看板、日程三种视图，可查看任务进度，分配任务，邀请成员加入工作区。使用Hono接管Next.js的Route Handlers提供后端接口，zod作为数据验证工具，保证前后端类型安全。",
+			technologies: [
+				"Next.js",
+				"Typescript",
+				"hello-pangea/dnd",
+				"react-big-calendar",
+				"Clerk",
+				"TailwindCSS",
+				"Shadcn UI",
+				"zod",
+				"Hono",
+			],
+			links: [
+				{
+					type: "网站",
+					href: "https://task.pxpilot.icu",
+					icon: <Icons.globe className="size-3" />,
+				},
+				{
+					type: "源码",
+					href: "https://github.com/pxpi1ot/task",
+					icon: <Icons.github className="size-3" />,
+				},
+			],
+			image: "/p-tasks.png",
+		},
+		{
 			title: "实时文档",
-			href: "https://live-docs-beta-weld.vercel.app/",
+			href: "https://live-docs.pxpilot.icu",
 
 			active: true,
 			description: "基于lexical编辑器和Liveblocks云服务实现的多人在线协作文档",
@@ -94,7 +116,7 @@ export const DATA = {
 			links: [
 				{
 					type: "网站",
-					href: "https://live-docs-beta-weld.vercel.app/",
+					href: "https://live-docs.pxpilot.icu",
 					icon: <Icons.globe className="size-3" />,
 				},
 				{
@@ -103,8 +125,7 @@ export const DATA = {
 					icon: <Icons.github className="size-3" />,
 				},
 			],
-			image:
-				"https://cdn3.easylink.cc/14bstu_postspark_export_2025-01-04_11-42-52.png?e=1735965797&token=J_WyMIdhZtwb0E0QHWRqEfQrd5lVSWLffl9QxaxP:o0tWrPtvxv8GCllVEwpWOjZFzb0=",
+			image: "/p-livedocs.png",
 		},
 	],
 } as const;

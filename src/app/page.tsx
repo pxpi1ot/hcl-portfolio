@@ -84,17 +84,7 @@ export default function Page() {
 							</BlurFade>
 						))}
 					</div>
-					<div className="flex flex-wrap gap-1 items-center">
-						<BlurFade delay={BLUR_FADE_DELAY * 8}>
-							<Badge variant="pink">数据库</Badge>
-						</BlurFade>
 
-						{DATA.skills.databases.map((skill, id) => (
-							<BlurFade key={skill} delay={BLUR_FADE_DELAY * 9 + id * 0.05}>
-								<Badge key={skill}>{skill}</Badge>
-							</BlurFade>
-						))}
-					</div>
 					<div className="flex flex-wrap gap-1 items-center">
 						<BlurFade delay={BLUR_FADE_DELAY * 10}>
 							<Badge variant="destructive">其他</Badge>
