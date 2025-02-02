@@ -99,6 +99,25 @@ export const DATA = {
 			image: "/p-tasks.png",
 		},
 		{
+			title: "实时通讯APP",
+			href: "",
+
+			active: true,
+			description:
+				"用Uniapp（nvue）实现类似微信的即时通讯平台app。实现了群聊，私聊，朋友圈，离线消息推送，本地聊天记录存储、发送文字，语音，定位（高德地图api），视频等功能",
+			technologies: [
+				"Uniapp",
+				"Vuex",
+				"Egg.js",
+				"MinIO",
+				"Redis",
+				"MySQL",
+				"WebSocket",
+			],
+			links: [],
+			image: "/p-chat.png",
+		},
+		{
 			title: "实时文档",
 			href: "https://live-docs.pxpilot.icu",
 
